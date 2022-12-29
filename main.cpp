@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <vector>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -41,9 +42,23 @@ int main()
 
   glViewport(0, 0, 800, 600);
 
+  float vertex_data[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+  };
+
+  GLuint VBO;
+  glGenBuffers(1, &VBO);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+
   while(!glfwWindowShouldClose(window))
     {
       processInput(window);
+      glClearColor(.2f, .3f, .3f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT);
 
       glfwSwapBuffers(window);
       glfwPollEvents();
