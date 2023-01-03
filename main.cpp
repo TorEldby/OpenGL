@@ -53,6 +53,32 @@ int main()
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  const char* vertexShaderSource = R"(
+    #version 330 core
+    layout (location=0) in vec3 aPos;
+
+    void main()
+    {
+      gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    }
+  )";
+
+  GLuint vertexShader;
+  vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+  glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
+  glCompileShader(vertexShader);
+
+  int success;
+  char infoLog[512];
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
+  if(!success) {
+      glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+      std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
 
   while(!glfwWindowShouldClose(window))
     {
